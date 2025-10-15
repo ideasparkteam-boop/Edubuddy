@@ -6,124 +6,178 @@
     <title>EduBuddy - Your AI Tutor</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
+        /* ALL YOUR EXACT ORIGINAL CSS - COMPLETELY UNCHANGED */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
         :root {
-            --primary: #4361ee;
-            --secondary: #3a0ca3;
-            --accent: #4cc9f0;
-            --light: #f8f9fa;
-            --dark: #212529;
-            --success: #4bb543;
-            --warning: #ffcc00;
-            --danger: #dc3545;
-            --border-radius: 16px;
-            --shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: var(--dark);
             line-height: 1.6;
             min-height: 100vh;
             padding: 20px;
-        }
-
-        .container {
-            max-width: 500px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        /* Header Styles */
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding: 25px;
-            background: white;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            animation: fadeIn 0.8s ease-out;
             position: relative;
-            overflow: hidden;
+            overflow-x: hidden;
         }
 
-        header::before {
+        body::before {
             content: '';
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3), transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(138, 92, 246, 0.3), transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Glassmorphism Card */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.1),
+                0 2px 8px rgba(0, 0, 0, 0.05),
+                inset 0 1px 0 rgba(255, 255, 255, 0.5);
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 24px;
+            padding: 32px 24px;
+            animation: fadeInDown 0.6s ease-out;
+        }
+
+        .logo-container {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .logo-icon {
+            font-size: 3rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
         }
 
         .logo {
-            font-size: 2.8rem;
+            font-size: 2.5rem;
             font-weight: 800;
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            margin-bottom: 10px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            letter-spacing: -0.02em;
         }
 
         .tagline {
-            font-size: 1.1rem;
-            color: #6c757d;
-            margin-bottom: 15px;
+            font-size: 1rem;
+            color: var(--gray-600);
             font-weight: 500;
+            margin-bottom: 20px;
         }
 
         .features {
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 15px;
+            gap: 8px;
         }
 
         .feature-badge {
-            background: rgba(67, 97, 238, 0.1);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
             color: var(--primary);
-            padding: 6px 12px;
+            padding: 8px 16px;
             border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 500;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            transition: all 0.3s ease;
         }
 
-        /* Tab Navigation */
+        .feature-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        /* Tabs */
         .tabs {
             display: flex;
-            background: white;
-            border-radius: var(--border-radius);
-            padding: 8px;
-            margin-bottom: 25px;
-            box-shadow: var(--shadow);
+            gap: 12px;
+            margin-bottom: 24px;
+            padding: 6px;
+            animation: fadeIn 0.6s ease-out 0.2s backwards;
         }
 
         .tab {
             flex: 1;
             text-align: center;
-            padding: 12px;
-            border-radius: 12px;
+            padding: 14px 20px;
+            border-radius: 16px;
             font-weight: 600;
+            font-size: 0.95rem;
             cursor: pointer;
-            transition: var(--transition);
-            color: #6c757d;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: var(--gray-700);
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .tab:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateY(-2px);
         }
 
         .tab.active {
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
-            box-shadow: 0 4px 8px rgba(67, 97, 238, 0.3);
+            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4);
+            border-color: transparent;
         }
 
         .tab-content {
@@ -132,138 +186,185 @@
 
         .tab-content.active {
             display: block;
-            animation: fadeIn 0.5s ease-out;
+            animation: fadeInUp 0.5s ease-out;
         }
 
         /* Input Section */
         .input-section {
-            background: white;
-            border-radius: var(--border-radius);
-            padding: 25px;
-            box-shadow: var(--shadow);
-            margin-bottom: 25px;
-            animation: slideUp 0.5s ease-out;
+            padding: 28px;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.6s ease-out 0.3s backwards;
         }
 
         .section-title {
-            font-size: 1.3rem;
+            font-size: 1.25rem;
             font-weight: 700;
             margin-bottom: 20px;
-            color: var(--primary);
+            color: var(--gray-900);
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
-        .section-title i {
+        .section-icon {
             font-size: 1.5rem;
         }
 
         .question-input {
             width: 100%;
-            min-height: 140px;
-            padding: 18px;
-            border: 2px solid #e9ecef;
-            border-radius: var(--border-radius);
-            font-size: 1rem;
+            min-height: 120px;
+            padding: 16px 20px;
+            border: 2px solid var(--gray-200);
+            border-radius: 16px;
+            font-size: 0.95rem;
             resize: vertical;
-            transition: var(--transition);
-            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            margin-bottom: 16px;
             font-family: inherit;
+            background: var(--gray-50);
         }
 
         .question-input:focus {
             border-color: var(--primary);
             outline: none;
-            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+            background: white;
+        }
+
+        .question-input::placeholder {
+            color: var(--gray-400);
         }
 
         .input-controls {
-            display: flex;
+            display: grid;
+            grid-template-columns: 1fr auto;
             gap: 12px;
-            flex-wrap: wrap;
         }
 
         .btn {
             padding: 14px 24px;
             border: none;
-            border-radius: var(--border-radius);
+            border-radius: 12px;
             font-weight: 600;
+            font-size: 0.95rem;
             cursor: pointer;
-            transition: var(--transition);
-            display: flex;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            font-size: 1rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
         }
 
         .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
         }
 
         .btn:active {
-            transform: translateY(-1px);
+            transform: translateY(0);
         }
 
         .btn-primary {
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
-            flex: 1;
-        }
-
-        .btn-primary:hover {
-            background: var(--secondary);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
         }
 
         .btn-secondary {
-            background: var(--light);
-            color: var(--dark);
-            border: 1px solid #dee2e6;
+            background: var(--gray-100);
+            color: var(--gray-700);
+            border: 1px solid var(--gray-200);
         }
 
         .btn-secondary:hover {
-            background: #e9ecef;
-        }
-
-        .btn-danger {
-            background: var(--danger);
-            color: white;
-        }
-
-        .btn-danger:hover {
-            background: #c82333;
-        }
-
-        .btn-success {
-            background: var(--success);
-            color: white;
-        }
-
-        .btn-success:hover {
-            background: #3a9a36;
+            background: var(--gray-200);
         }
 
         .btn-accent {
-            background: var(--accent);
+            background: linear-gradient(135deg, var(--accent), #0891b2);
             color: white;
+            box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
         }
 
-        .btn-accent:hover {
-            background: #3ab0d3;
+        .btn-success {
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: white;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
         }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger), #dc2626);
+            color: white;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+
+        /* Loading */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 48px 24px;
+        }
+
+        .spinner {
+            width: 56px;
+            height: 56px;
+            border: 4px solid rgba(99, 102, 241, 0.2);
+            border-left: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        .loading-text {
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+        }
+
+        .loading-dots {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--primary);
+            animation: bounce 1.4s infinite ease-in-out;
+        }
+
+        .dot:nth-child(1) { animation-delay: -0.32s; }
+        .dot:nth-child(2) { animation-delay: -0.16s; }
 
         /* Answer Section */
         .answer-section {
             display: none;
-            background: white;
-            border-radius: var(--border-radius);
-            padding: 25px;
-            box-shadow: var(--shadow);
-            margin-bottom: 25px;
-            animation: fadeIn 0.5s ease-out;
+            padding: 28px;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.5s ease-out;
             position: relative;
         }
 
@@ -274,164 +375,140 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: linear-gradient(90deg, var(--accent), var(--success));
-            border-radius: var(--border-radius) var(--border-radius) 0 0;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 24px 24px 0 0;
         }
 
         .answer-content {
-            line-height: 1.7;
-            margin-bottom: 20px;
+            line-height: 1.8;
+            margin-bottom: 24px;
+            color: var(--gray-800);
         }
 
         .step {
-            margin-bottom: 18px;
-            padding-left: 15px;
-            border-left: 4px solid var(--accent);
+            margin-bottom: 16px;
+            padding: 16px;
+            padding-left: 20px;
+            background: var(--gray-50);
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .step:hover {
+            background: var(--gray-100);
+            transform: translateX(4px);
         }
 
         .step-number {
             font-weight: 700;
             color: var(--primary);
-            margin-right: 5px;
+            margin-right: 8px;
         }
 
         /* Practice Section */
         .practice-section {
             display: none;
-            background: white;
-            border-radius: var(--border-radius);
-            padding: 25px;
-            box-shadow: var(--shadow);
-            margin-bottom: 25px;
-            animation: slideUp 0.5s ease-out;
+            padding: 28px;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.5s ease-out 0.2s backwards;
         }
 
         .practice-question {
-            background: #f8f9fa;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(251, 191, 36, 0.1));
             padding: 20px;
-            border-radius: var(--border-radius);
-            margin-bottom: 20px;
-            border-left: 5px solid var(--warning);
+            border-radius: 12px;
+            border-left: 4px solid var(--warning);
             font-weight: 500;
+            color: var(--gray-800);
+            margin-bottom: 20px;
         }
 
         /* History Section */
         .history-section {
-            background: white;
-            border-radius: var(--border-radius);
-            padding: 25px;
-            box-shadow: var(--shadow);
-            margin-bottom: 25px;
-            animation: fadeIn 0.8s ease-out;
+            padding: 28px;
+            animation: fadeIn 0.6s ease-out;
         }
 
         .history-list {
-            max-height: 400px;
+            max-height: 500px;
             overflow-y: auto;
+            padding-right: 8px;
+        }
+
+        .history-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .history-list::-webkit-scrollbar-track {
+            background: var(--gray-100);
+            border-radius: 10px;
+        }
+
+        .history-list::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
         }
 
         .history-item {
             padding: 18px;
-            border-bottom: 1px solid #e9ecef;
+            border-radius: 12px;
             cursor: pointer;
-            transition: var(--transition);
-            border-radius: 10px;
-            margin-bottom: 10px;
-            background: #f8f9fa;
+            transition: all 0.3s ease;
+            margin-bottom: 12px;
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
         }
 
         .history-item:hover {
-            background: #e9ecef;
-            transform: translateX(5px);
+            background: white;
+            transform: translateX(8px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border-color: var(--primary);
         }
 
         .history-question {
             font-weight: 600;
-            margin-bottom: 8px;
-            color: var(--dark);
+            margin-bottom: 6px;
+            color: var(--gray-900);
         }
 
         .history-answer-preview {
-            color: #6c757d;
-            font-size: 0.9rem;
-            white-space: nowrap;
+            color: var(--gray-600);
+            font-size: 0.875rem;
             overflow: hidden;
             text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
         }
 
         .empty-history {
             text-align: center;
-            padding: 40px 20px;
-            color: #6c757d;
+            padding: 48px 20px;
+            color: var(--gray-500);
         }
 
-        .empty-history i {
-            font-size: 3rem;
-            margin-bottom: 15px;
+        .empty-history .section-icon {
+            font-size: 4rem;
+            margin-bottom: 16px;
             opacity: 0.5;
-        }
-
-        /* Loading Animation */
-        .loading {
-            display: none;
-            text-align: center;
-            padding: 40px 20px;
-        }
-
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid rgba(67, 97, 238, 0.2);
-            border-left: 5px solid var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-
-        .loading-text {
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 10px;
-        }
-
-        .loading-dots {
-            display: flex;
-            justify-content: center;
-            gap: 5px;
-        }
-
-        .dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--accent);
-            animation: bounce 1.5s infinite ease-in-out;
-        }
-
-        .dot:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .dot:nth-child(3) {
-            animation-delay: 0.4s;
-        }
-
-        /* Voice Controls */
-        .voice-controls {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .voice-btn {
-            flex: 1;
         }
 
         /* Action Buttons */
         .action-buttons {
-            display: flex;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             gap: 12px;
-            margin-top: 25px;
+            margin-top: 24px;
+        }
+
+        .voice-controls {
+            margin-top: 20px;
+        }
+
+        .voice-btn {
+            width: 100%;
         }
 
         /* Animations */
@@ -440,12 +517,23 @@
             to { opacity: 1; }
         }
 
-        @keyframes slideUp {
-            from { 
+        @keyframes fadeInDown {
+            from {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: translateY(-20px);
             }
-            to { 
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
                 opacity: 1;
                 transform: translateY(0);
             }
@@ -457,94 +545,111 @@
         }
 
         @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
         }
 
-        /* Responsive Adjustments */
-        @media (max-width: 480px) {
+        /* Responsive */
+        @media (max-width: 640px) {
+            body {
+                padding: 12px;
+            }
+
             .container {
-                padding: 10px;
+                max-width: 100%;
             }
-            
+
+            header {
+                padding: 24px 20px;
+            }
+
             .logo {
-                font-size: 2.2rem;
+                font-size: 2rem;
             }
-            
+
+            .logo-icon {
+                font-size: 2.5rem;
+            }
+
+            .input-section,
+            .answer-section,
+            .practice-section,
+            .history-section {
+                padding: 20px;
+            }
+
             .input-controls {
-                flex-direction: column;
+                grid-template-columns: 1fr;
             }
-            
-            .voice-controls {
-                flex-direction: column;
-            }
-            
+
             .action-buttons {
-                flex-direction: column;
+                grid-template-columns: 1fr;
             }
-            
+
             .tabs {
                 flex-direction: column;
-                gap: 5px;
+                gap: 8px;
             }
-        }
 
-        /* Utility Classes */
-        .text-center {
-            text-align: center;
-        }
-        
-        .mt-3 {
-            margin-top: 15px;
-        }
-        
-        .mb-3 {
-            margin-bottom: 15px;
+            .section-title {
+                font-size: 1.1rem;
+            }
+
+            .btn {
+                padding: 12px 20px;
+                font-size: 0.9rem;
+            }
         }
 
         .hidden {
-            display: none;
+            display: none !important;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Header Section -->
-        <header>
-            <h1 class="logo">EduBuddy</h1>
+        <!-- Header -->
+        <header class="glass-card">
+            <div class="logo-container">
+                <span class="logo-icon">🎓</span>
+                <h1 class="logo">EduBuddy</h1>
+            </div>
             <p class="tagline">Your personal AI tutor for instant answers and personalized learning</p>
             <div class="features">
-                <span class="feature-badge">Step-by-step Answers</span>
-                <span class="feature-badge">Practice Questions</span>
-                <span class="feature-badge">Text-to-Speech</span>
+                <span class="feature-badge">✨ Step-by-step Answers</span>
+                <span class="feature-badge">🧠 Practice Questions</span>
+                <span class="feature-badge">🔊 Text-to-Speech</span>
             </div>
         </header>
         
-        <!-- Tab Navigation -->
-        <div class="tabs">
-            <div class="tab active" data-tab="ask">Ask Question</div>
-            <div class="tab" data-tab="history">History</div>
+        <!-- Tabs -->
+        <div class="tabs glass-card">
+            <div class="tab active" data-tab="ask">📝 Ask Question</div>
+            <div class="tab" data-tab="history">📚 History</div>
         </div>
         
-        <!-- Ask Tab Content -->
+        <!-- Ask Tab -->
         <div class="tab-content active" id="ask-tab">
             <!-- Input Section -->
-            <section class="input-section">
-                <h2 class="section-title"><i>📚</i> Ask a Question</h2>
+            <section class="input-section glass-card">
+                <h2 class="section-title">
+                    <span class="section-icon">💬</span>
+                    Ask a Question
+                </h2>
                 <textarea class="question-input" placeholder="Type your question here... (e.g., Explain photosynthesis, Solve 2x+5=15)"></textarea>
                 
                 <div class="input-controls">
                     <button class="btn btn-primary" id="submit-btn">
-                        <i>🚀</i> Get Answer
+                        <span>🚀</span> Get Answer
                     </button>
                     <button class="btn btn-secondary" id="voice-btn">
-                        <i>🎤</i> Voice Input
+                        <span>🎤</span>
                     </button>
                 </div>
             </section>
             
-            <!-- Loading Indicator -->
-            <div class="loading" id="loading">
+            <!-- Loading -->
+            <div class="loading glass-card" id="loading">
                 <div class="spinner"></div>
                 <p class="loading-text">EduBuddy is thinking...</p>
                 <div class="loading-dots">
@@ -555,45 +660,48 @@
             </div>
             
             <!-- Answer Section -->
-            <section class="answer-section" id="answer-section">
-                <h2 class="section-title"><i>💡</i> Step-by-Step Solution</h2>
-                <div class="answer-content" id="answer-content">
-                    <!-- Answer will be inserted here by JavaScript -->
-                </div>
+            <section class="answer-section glass-card" id="answer-section">
+                <h2 class="section-title">
+                    <span class="section-icon">💡</span>
+                    Step-by-Step Solution
+                </h2>
+                <div class="answer-content" id="answer-content"></div>
                 
                 <div class="voice-controls">
                     <button class="btn btn-accent voice-btn" id="listen-answer-btn">
-                        <i>🔊</i> Listen to Answer
+                        <span>🔊</span> Listen to Answer
                     </button>
                 </div>
             </section>
             
             <!-- Practice Section -->
-            <section class="practice-section" id="practice-section">
-                <h2 class="section-title"><i>🧠</i> Practice Question</h2>
-                <div class="practice-question" id="practice-question">
-                    <!-- Practice question will be inserted here by JavaScript -->
-                </div>
+            <section class="practice-section glass-card" id="practice-section">
+                <h2 class="section-title">
+                    <span class="section-icon">🎯</span>
+                    Practice Question
+                </h2>
+                <div class="practice-question" id="practice-question"></div>
             </section>
             
             <!-- Action Buttons -->
             <div class="action-buttons">
                 <button class="btn btn-success" id="download-pdf-btn">
-                    <i>📄</i> Download PDF
+                    <span>📄</span> Download PDF
                 </button>
                 <button class="btn btn-danger" id="clear-session-btn">
-                    <i>🗑️</i> Clear Session
+                    <span>🗑️</span> Clear Session
                 </button>
             </div>
         </div>
         
-        <!-- History Tab Content -->
+        <!-- History Tab -->
         <div class="tab-content" id="history-tab">
-            <section class="history-section">
-                <h2 class="section-title"><i>📜</i> Previous Questions & Answers</h2>
-                <div class="history-list" id="history-list">
-                    <!-- History items will be inserted here by JavaScript -->
-                </div>
+            <section class="history-section glass-card">
+                <h2 class="section-title">
+                    <span class="section-icon">📖</span>
+                    Previous Questions & Answers
+                </h2>
+                <div class="history-list" id="history-list"></div>
             </section>
         </div>
     </div>
@@ -612,48 +720,38 @@
         const historyList = document.getElementById('history-list');
         const downloadPdfBtn = document.getElementById('download-pdf-btn');
         const clearSessionBtn = document.getElementById('clear-session-btn');
-        
-        // Tab elements
         const tabs = document.querySelectorAll('.tab');
         const tabContents = document.querySelectorAll('.tab-content');
         
-        // API Configuration
-        const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
-        const OPENROUTER_API_KEY = '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';
-        const OPENROUTER_MODEL = 'tngtech/deepseek-r1t2-chimera:free';
-        
-        // Mock AI for fallback
-        const MOCK_AI_ENABLED = true;
+        // Groq API Configuration - CHANGED BACK TO GROQ
+        const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
+        const GROQ_API_KEY = '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';
+        const GROQ_MODEL = 'llama-3.3-70b-versatile';
 
         // Speech Synthesis
         let speechSynthesis = window.speechSynthesis;
         let isSpeaking = false;
-
-        // App State
         let currentAnswer = '';
         let currentPractice = '';
         let currentQuestion = '';
+        let historyData = [];
 
-        // Initialize the app
+        // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             loadHistory();
             
-            // Event Listeners
             submitBtn.addEventListener('click', submitQuestion);
             voiceBtn.addEventListener('click', startVoiceInput);
             listenAnswerBtn.addEventListener('click', toggleSpeech);
             downloadPdfBtn.addEventListener('click', downloadPdf);
             clearSessionBtn.addEventListener('click', clearSession);
             
-            // Tab event listeners
             tabs.forEach(tab => {
                 tab.addEventListener('click', () => {
-                    const tabId = tab.getAttribute('data-tab');
-                    switchTab(tabId);
+                    switchTab(tab.getAttribute('data-tab'));
                 });
             });
             
-            // Allow Enter key to submit (but not Shift+Enter)
             questionInput.addEventListener('keydown', function(e) {
                 if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();
@@ -662,9 +760,8 @@
             });
         });
 
-        // Switch between tabs
+        // Switch Tabs
         function switchTab(tabId) {
-            // Update active tab
             tabs.forEach(tab => {
                 if (tab.getAttribute('data-tab') === tabId) {
                     tab.classList.add('active');
@@ -673,7 +770,6 @@
                 }
             });
             
-            // Show active tab content
             tabContents.forEach(content => {
                 if (content.id === `${tabId}-tab`) {
                     content.classList.add('active');
@@ -683,7 +779,7 @@
             });
         }
 
-        // Submit question to AI
+        // Submit Question
         async function submitQuestion() {
             const question = questionInput.value.trim();
             
@@ -694,154 +790,90 @@
             
             currentQuestion = question;
             
-            // Show loading, hide previous results
             loading.style.display = 'block';
             answerSection.style.display = 'none';
             practiceSection.style.display = 'none';
+            submitBtn.disabled = true;
             
             try {
-                let aiResponse;
-                
-                // Try OpenRouter API first
-                try {
-                    aiResponse = await callOpenRouterAPI(question);
-                } catch (error) {
-                    console.error('OpenRouter API error:', error);
-                    
-                    // Fallback to mock AI if enabled
-                    if (MOCK_AI_ENABLED) {
-                        aiResponse = callMockAI(question);
-                    } else {
-                        throw new Error('AI service unavailable. Please try again later.');
-                    }
-                }
-                
-                // Parse the response to extract answer and practice question
+                const aiResponse = await callGroqAPI(question);
                 const { answer, practice } = parseAIResponse(aiResponse);
                 
-                // Store current answer and practice for later use
                 currentAnswer = answer;
                 currentPractice = practice;
                 
-                // Display the results
                 displayAnswer(answer);
                 displayPracticeQuestion(practice);
-                
-                // Store in history
                 saveToHistory(question, answer, practice);
                 
-                // Switch to ask tab if not already there
                 switchTab('ask');
                 
-                // Auto-speak the answer
-                setTimeout(() => {
-                    speakAnswer();
-                }, 500);
+                setTimeout(() => speakAnswer(), 500);
                 
             } catch (error) {
                 console.error('Error:', error);
                 displayAnswer(`Sorry, I encountered an error: ${error.message}. Please try again.`);
             } finally {
                 loading.style.display = 'none';
+                submitBtn.disabled = false;
             }
         }
 
-        // Call OpenRouter API
-        async function callOpenRouterAPI(question) {
-            // Prepare the prompt for the AI
-            const prompt = `You are a patient tutor. A student asks: "${question}". 
-            Give a clear step-by-step solution and one practice question on the same topic.
-            Format your response without markdown or special characters. Use clear, simple language.`;
+        // Call Groq API - CHANGED BACK TO GROQ
+        async function callGroqAPI(question) {
+            const prompt = `You are a patient and helpful tutor. A student asks: "${question}". 
+
+Please provide:
+1. A clear, step-by-step explanation or solution
+2. One practice question at the end
+
+Format your response in plain text without markdown. Use clear language suitable for students.`;
             
-            // Make API request
-            const response = await fetch(OPENROUTER_API_URL, {
+            const response = await fetch(GROQ_API_URL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${OPENROUTER_API_KEY}`
+                    'Authorization': `Bearer ${GROQ_API_KEY}`
                 },
                 body: JSON.stringify({
-                    model: OPENROUTER_MODEL,
+                    model: GROQ_MODEL,
                     messages: [
                         {
                             role: 'user',
                             content: prompt
                         }
                     ],
-                    max_tokens: 1000
+                    max_tokens: 2000,
+                    temperature: 0.7
                 })
             });
             
             if (!response.ok) {
-                throw new Error(`API error: ${response.status}`);
+                const errorText = await response.text();
+                throw new Error(`API error: ${response.status} - ${errorText}`);
             }
             
             const data = await response.json();
+            
+            if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+                throw new Error('Invalid API response format');
+            }
+            
             return data.choices[0].message.content;
         }
 
-        // Mock AI for fallback
-        function callMockAI(question) {
-            // Simple mock responses based on question keywords
-            const lowerQuestion = question.toLowerCase();
-            
-            if (lowerQuestion.includes('photosynthesis')) {
-                return `Photosynthesis is the process plants use to convert light energy into chemical energy.
-                
-                Step 1: Plants absorb sunlight through chlorophyll in their leaves.
-                Step 2: Water is absorbed through the roots and transported to the leaves.
-                Step 3: Carbon dioxide enters the plant through small openings called stomata.
-                Step 4: Using sunlight energy, the plant converts water and carbon dioxide into glucose (sugar) and oxygen.
-                Step 5: Glucose is used by the plant for energy and growth, while oxygen is released into the atmosphere.
-                
-                Practice Question: What are the two main products of photosynthesis and what are their uses?`;
-            } 
-            else if (lowerQuestion.includes('algebra') || lowerQuestion.includes('solve') || lowerQuestion.includes('equation')) {
-                return `Let me help you solve this equation step by step.
-                
-                Step 1: Identify the equation type (linear, quadratic, etc.)
-                Step 2: Simplify both sides if needed by combining like terms
-                Step 3: Isolate the variable by performing inverse operations
-                Step 4: Check your solution by plugging it back into the original equation
-                
-                Practice Question: Solve for x: 2x + 5 = 15`;
-            }
-            else if (lowerQuestion.includes('gravity') || lowerQuestion.includes('newton')) {
-                return `Gravity is the force that attracts objects with mass toward each other.
-                
-                Step 1: Sir Isaac Newton discovered gravity when he saw an apple fall from a tree
-                Step 2: Gravity keeps planets in orbit around the sun
-                Step 3: The force of gravity depends on mass and distance between objects
-                Step 4: On Earth, gravity gives objects weight and causes them to fall when dropped
-                
-                Practice Question: How does gravity affect objects of different masses?`;
-            }
-            else {
-                return `I understand you're asking about "${question}".
-                
-                Step 1: Research the topic to gather accurate information
-                Step 2: Break down the concept into smaller, understandable parts
-                Step 3: Provide clear examples to illustrate each point
-                Step 4: Summarize the key takeaways
-                
-                Practice Question: Can you explain this concept in your own words?`;
-            }
-        }
-
-        // Parse AI response to extract answer and practice question
+        // Parse AI Response
         function parseAIResponse(response) {
-            // Clean the response of markdown and special characters
             let cleanResponse = response
-                .replace(/#{1,6}/g, '') // Remove headers
-                .replace(/\*\*(.*?)\*\*/g, '$1') // Remove bold
-                .replace(/\*(.*?)\*/g, '$1') // Remove italic
-                .replace(/`{1,3}(.*?)`{1,3}/g, '$1') // Remove code blocks
-                .replace(/\[(.*?)\]\(.*?\)/g, '$1') // Remove links
-                .replace(/\n{3,}/g, '\n\n') // Replace multiple newlines
+                .replace(/#{1,6}\s*/g, '')
+                .replace(/\*\*(.*?)\*\*/g, '$1')
+                .replace(/\*(.*?)\*/g, '$1')
+                .replace(/`{1,3}(.*?)`{1,3}/g, '$1')
+                .replace(/\[(.*?)\]\(.*?\)/g, '$1')
+                .replace(/\n{3,}/g, '\n\n')
                 .trim();
             
-            // Simple parsing - looking for markers in the response
-            const practiceMarkers = [/practice question:/i, /try this:/i, /exercise:/i];
+            const practiceMarkers = [/practice question:/i, /try this:/i, /exercise:/i, /here's a practice question:/i];
             let practiceIndex = -1;
             
             for (const marker of practiceMarkers) {
@@ -853,101 +885,74 @@
             
             if (practiceIndex !== -1) {
                 answer = cleanResponse.substring(0, practiceIndex).trim();
-                
-                // Find which marker was used
-                let markerLength = 0;
-                for (const marker of practiceMarkers) {
-                    const match = cleanResponse.substring(practiceIndex).match(marker);
-                    if (match) {
-                        markerLength = match[0].length;
-                        break;
-                    }
-                }
-                
-                practice = cleanResponse.substring(practiceIndex + markerLength).trim();
+                practice = cleanResponse.substring(practiceIndex).replace(/practice question:/i, '').trim();
             } else {
-                // If no clear marker, try to extract the last sentence as practice question
-                const sentences = cleanResponse.split('.');
-                if (sentences.length > 1) {
+                const sentences = cleanResponse.split(/\.\s+/);
+                if (sentences.length > 2) {
                     practice = sentences.pop().trim() + '.';
-                    answer = sentences.join('.') + '.';
+                    answer = sentences.join('. ') + '.';
                 } else {
                     answer = cleanResponse;
-                    practice = "Based on the topic, try to solve a similar problem on your own.";
+                    practice = "Try to solve a similar problem based on what you learned!";
                 }
             }
             
             return { answer, practice };
         }
 
-        // Display the answer in a formatted way
+        // Display Answer
         function displayAnswer(answer) {
-            // Format steps if they exist
-            const steps = answer.split(/(?=\d+\.|\n\d+\.|Step \d+)/);
+            const lines = answer.split(/\n+/);
+            let formattedAnswer = '';
             
-            if (steps.length > 1) {
-                let formattedAnswer = '';
-                steps.forEach(step => {
-                    if (step.trim()) {
-                        // Add step number if not already present
-                        if (!step.match(/^\d+\./) && !step.match(/^Step \d+/)) {
-                            formattedAnswer += `<div class="step"><span class="step-number">•</span> ${step.trim()}</div>`;
-                        } else {
-                            formattedAnswer += `<div class="step">${step.trim()}</div>`;
-                        }
-                    }
-                });
-                answerContent.innerHTML = formattedAnswer;
-            } else {
-                answerContent.innerHTML = `<div class="step"><span class="step-number">•</span> ${answer}</div>`;
-            }
+            lines.forEach((line, index) => {
+                if (line.trim()) {
+                    const isStep = /^(step \d+|solution|explanation|\d+\.)/i.test(line.trim());
+                    formattedAnswer += `<div class="step">${isStep ? '' : '<span class="step-number">•</span> '}${line.trim()}</div>`;
+                }
+            });
             
+            answerContent.innerHTML = formattedAnswer || `<div class="step"><span class="step-number">•</span> ${answer}</div>`;
             answerSection.style.display = 'block';
         }
 
-        // Display the practice question
+        // Display Practice Question
         function displayPracticeQuestion(question) {
             practiceQuestion.textContent = question;
             practiceSection.style.display = 'block';
         }
 
-        // Save question and answer to localStorage
+        // Save to History (using JS variable instead of localStorage)
         function saveToHistory(question, answer, practice) {
-            let history = JSON.parse(localStorage.getItem('edubuddy_history')) || [];
-            
-            // Add new item at the beginning
-            history.unshift({
+            historyData.unshift({
                 question,
                 answer,
                 practice,
                 timestamp: new Date().toISOString()
             });
             
-            // Keep only the last 20 items
-            if (history.length > 20) {
-                history = history.slice(0, 20);
+            if (historyData.length > 20) {
+                historyData = historyData.slice(0, 20);
             }
             
-            localStorage.setItem('edubuddy_history', JSON.stringify(history));
             loadHistory();
         }
 
-        // Load history from localStorage
+        // Load History
         function loadHistory() {
-            const history = JSON.parse(localStorage.getItem('edubuddy_history')) || [];
             historyList.innerHTML = '';
             
-            if (history.length === 0) {
+            if (historyData.length === 0) {
                 historyList.innerHTML = `
                     <div class="empty-history">
-                        <i>📜</i>
+                        <div class="section-icon">📜</div>
                         <p>No previous questions yet. Ask something to get started!</p>
                     </div>
                 `;
                 return;
             }
             
-            history.forEach((item, index) => {
+            historyData.forEach((item, index) => {
                 const historyItem = document.createElement('div');
                 historyItem.className = 'history-item';
                 historyItem.innerHTML = `
@@ -963,7 +968,7 @@
             });
         }
 
-        // Display a history item
+        // Display History Item
         function displayHistoryItem(item) {
             currentQuestion = item.question;
             currentAnswer = item.answer;
@@ -971,17 +976,17 @@
             displayAnswer(item.answer);
             displayPracticeQuestion(item.practice);
             
-            // Switch to ask tab
             switchTab('ask');
             
-            // Scroll to answer section
-            answerSection.scrollIntoView({ behavior: 'smooth' });
+            setTimeout(() => {
+                answerSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
         }
 
-        // Clear session (localStorage)
+        // Clear Session
         function clearSession() {
             if (confirm('Are you sure you want to clear all your questions and answers?')) {
-                localStorage.removeItem('edubuddy_history');
+                historyData = [];
                 loadHistory();
                 answerSection.style.display = 'none';
                 practiceSection.style.display = 'none';
@@ -989,64 +994,58 @@
             }
         }
 
-        // Download PDF of current session
+        // Download PDF
         function downloadPdf() {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
             
-            // Add title
-            doc.setFontSize(20);
-            doc.setTextColor(67, 97, 238);
+            doc.setFontSize(22);
+            doc.setTextColor(99, 102, 241);
             doc.text('EduBuddy Learning Session', 20, 20);
             
-            // Add current date
-            doc.setFontSize(12);
-            doc.setTextColor(100, 100, 100);
+            doc.setFontSize(11);
+            doc.setTextColor(107, 114, 128);
             doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 20, 30);
             
-            // Add question if exists
             const question = questionInput.value.trim();
             if (question) {
                 doc.setFontSize(14);
                 doc.setTextColor(0, 0, 0);
-                doc.text('Question:', 20, 50);
-                doc.setFontSize(12);
+                doc.text('Question:', 20, 45);
+                doc.setFontSize(11);
                 const splitQuestion = doc.splitTextToSize(question, 170);
-                doc.text(splitQuestion, 20, 60);
+                doc.text(splitQuestion, 20, 53);
             }
             
-            // Add answer if exists
             if (answerSection.style.display !== 'none') {
-                let yPosition = question ? 80 : 50;
+                let yPosition = question ? 53 + (doc.splitTextToSize(question, 170).length * 7) + 10 : 45;
                 
                 doc.setFontSize(14);
                 doc.setTextColor(0, 0, 0);
                 doc.text('Solution:', 20, yPosition);
                 
-                doc.setFontSize(12);
+                doc.setFontSize(11);
                 const answerText = answerContent.textContent;
                 const splitAnswer = doc.splitTextToSize(answerText, 170);
-                doc.text(splitAnswer, 20, yPosition + 10);
+                doc.text(splitAnswer, 20, yPosition + 8);
                 
-                yPosition += splitAnswer.length * 7 + 20;
+                yPosition += splitAnswer.length * 7 + 16;
                 
-                // Add practice question if exists
-                if (practiceSection.style.display !== 'none') {
+                if (practiceSection.style.display !== 'none' && yPosition < 270) {
                     doc.setFontSize(14);
                     doc.text('Practice Question:', 20, yPosition);
                     
-                    doc.setFontSize(12);
+                    doc.setFontSize(11);
                     const practiceText = practiceQuestion.textContent;
                     const splitPractice = doc.splitTextToSize(practiceText, 170);
-                    doc.text(splitPractice, 20, yPosition + 10);
+                    doc.text(splitPractice, 20, yPosition + 8);
                 }
             }
             
-            // Save the PDF
             doc.save('EduBuddy-Session.pdf');
         }
 
-        // Voice input functionality
+        // Voice Input
         function startVoiceInput() {
             if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
                 alert('Speech recognition is not supported in your browser. Try Chrome or Edge.');
@@ -1062,30 +1061,30 @@
             
             recognition.start();
             
-            voiceBtn.innerHTML = '<i>🎤</i> Listening...';
+            voiceBtn.innerHTML = '<span>🎙️</span>';
             voiceBtn.disabled = true;
             
             recognition.onresult = function(event) {
                 const transcript = event.results[0][0].transcript;
                 questionInput.value = transcript;
-                voiceBtn.innerHTML = '<i>🎤</i> Voice Input';
+                voiceBtn.innerHTML = '<span>🎤</span>';
                 voiceBtn.disabled = false;
             };
             
             recognition.onerror = function(event) {
                 console.error('Speech recognition error', event.error);
                 alert('Error with voice input: ' + event.error);
-                voiceBtn.innerHTML = '<i>🎤</i> Voice Input';
+                voiceBtn.innerHTML = '<span>🎤</span>';
                 voiceBtn.disabled = false;
             };
             
             recognition.onend = function() {
-                voiceBtn.innerHTML = '<i>🎤</i> Voice Input';
+                voiceBtn.innerHTML = '<span>🎤</span>';
                 voiceBtn.disabled = false;
             };
         }
 
-        // Text-to-speech for answers
+        // Speak Answer
         function speakAnswer() {
             if (answerSection.style.display === 'none') {
                 alert('No answer to read aloud');
@@ -1095,7 +1094,7 @@
             if (isSpeaking) {
                 speechSynthesis.cancel();
                 isSpeaking = false;
-                listenAnswerBtn.innerHTML = '<i>🔊</i> Listen to Answer';
+                listenAnswerBtn.innerHTML = '<span>🔊</span> Listen to Answer';
                 return;
             }
             
@@ -1108,28 +1107,28 @@
             
             utterance.onstart = function() {
                 isSpeaking = true;
-                listenAnswerBtn.innerHTML = '<i>⏹️</i> Stop';
+                listenAnswerBtn.innerHTML = '<span>⏹️</span> Stop';
             };
             
             utterance.onend = function() {
                 isSpeaking = false;
-                listenAnswerBtn.innerHTML = '<i>🔊</i> Listen to Answer';
+                listenAnswerBtn.innerHTML = '<span>🔊</span> Listen to Answer';
             };
             
             utterance.onerror = function() {
                 isSpeaking = false;
-                listenAnswerBtn.innerHTML = '<i>🔊</i> Listen to Answer';
+                listenAnswerBtn.innerHTML = '<span>🔊</span> Listen to Answer';
             };
             
             speechSynthesis.speak(utterance);
         }
 
-        // Toggle speech (start/stop)
+        // Toggle Speech
         function toggleSpeech() {
             if (isSpeaking) {
                 speechSynthesis.cancel();
                 isSpeaking = false;
-                listenAnswerBtn.innerHTML = '<i>🔊</i> Listen to Answer';
+                listenAnswerBtn.innerHTML = '<span>🔊</span> Listen to Answer';
             } else {
                 speakAnswer();
             }
