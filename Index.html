@@ -1,0 +1,1556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduBuddy - Your AI Tutor</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4bb543;
+            --warning: #ffcc00;
+            --danger: #dc3545;
+            --border-radius: 16px;
+            --shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+            animation: gradientShift 8s ease-in-out infinite;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            animation: slideInUp 0.8s ease-out;
+        }
+
+        /* Header Styles */
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 25px;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            animation: fadeIn 0.8s ease-out, slideInDown 0.8s ease-out;
+            position: relative;
+            overflow: hidden;
+            transform: translateY(0);
+            transition: transform 0.3s ease;
+        }
+
+        header:hover {
+            transform: translateY(-5px);
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            animation: shimmer 2s infinite;
+        }
+
+        .logo {
+            font-size: 2.8rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            animation: bounceIn 1s ease-out;
+        }
+
+        .tagline {
+            font-size: 1.1rem;
+            color: #6c757d;
+            margin-bottom: 15px;
+            font-weight: 500;
+            animation: fadeIn 1s ease-out 0.3s both;
+        }
+
+        .features {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+            animation: fadeIn 1s ease-out 0.6s both;
+        }
+
+        .feature-badge {
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .feature-badge:hover {
+            transform: scale(1.05);
+            background: rgba(67, 97, 238, 0.2);
+        }
+
+        /* Tab Navigation */
+        .tabs {
+            display: flex;
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 8px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow);
+            animation: slideInUp 0.8s ease-out 0.4s both;
+        }
+
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            color: #6c757d;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tab::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .tab:hover::before {
+            left: 100%;
+        }
+
+        .tab.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 8px rgba(67, 97, 238, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Input Section */
+        .input-section {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            margin-bottom: 25px;
+            animation: slideInUp 0.8s ease-out 0.6s both;
+            transform: translateY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .input-section:hover {
+            transform: translateY(-3px);
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: fadeInLeft 0.8s ease-out;
+        }
+
+        .section-title i {
+            font-size: 1.5rem;
+            animation: bounce 2s infinite;
+        }
+
+        .question-input {
+            width: 100%;
+            min-height: 140px;
+            padding: 18px;
+            border: 2px solid #e9ecef;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            resize: vertical;
+            transition: var(--transition);
+            margin-bottom: 20px;
+            font-family: inherit;
+            animation: fadeIn 0.8s ease-out 0.8s both;
+        }
+
+        .question-input:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+            transform: scale(1.01);
+        }
+
+        .input-controls {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            animation: fadeIn 0.8s ease-out 1s both;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            flex: 1;
+        }
+
+        .btn-primary:hover {
+            background: var(--secondary);
+        }
+
+        .btn-secondary {
+            background: var(--light);
+            color: var(--dark);
+            border: 1px solid #dee2e6;
+        }
+
+        .btn-secondary:hover {
+            background: #e9ecef;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #3a9a36;
+        }
+
+        .btn-accent {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-accent:hover {
+            background: #3ab0d3;
+        }
+
+        /* Image Upload */
+        .image-upload-container {
+            margin-bottom: 20px;
+            animation: fadeIn 0.8s ease-out 0.7s both;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-input {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .file-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 20px;
+            background: var(--light);
+            border: 2px dashed #dee2e6;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            width: 100%;
+            animation: pulse 2s infinite;
+        }
+
+        .file-label:hover {
+            background: #e9ecef;
+            border-color: var(--primary);
+            transform: scale(1.02);
+        }
+
+        .file-name {
+            display: block;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #6c757d;
+            text-align: center;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .image-preview {
+            margin-top: 15px;
+            text-align: center;
+            display: none;
+            animation: zoomIn 0.5s ease-out;
+        }
+
+        .image-preview img {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .image-preview img:hover {
+            transform: scale(1.05);
+        }
+
+        .remove-image {
+            margin-top: 10px;
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .remove-image:hover {
+            transform: scale(1.05);
+            background: #c82333;
+        }
+
+        /* Answer Section */
+        .answer-section {
+            display: none;
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            margin-bottom: 25px;
+            animation: slideInUp 0.5s ease-out;
+            position: relative;
+            transform: translateY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .answer-section:hover {
+            transform: translateY(-3px);
+        }
+
+        .answer-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--success));
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+            animation: shimmer 2s infinite;
+        }
+
+        .answer-content {
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .step {
+            margin-bottom: 18px;
+            padding-left: 15px;
+            border-left: 4px solid var(--accent);
+            animation: fadeInLeft 0.5s ease-out;
+            transition: transform 0.3s ease;
+        }
+
+        .step:hover {
+            transform: translateX(5px);
+        }
+
+        .step-number {
+            font-weight: 700;
+            color: var(--primary);
+            margin-right: 5px;
+        }
+
+        /* Practice Section */
+        .practice-section {
+            display: none;
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            margin-bottom: 25px;
+            animation: slideInUp 0.5s ease-out;
+            transform: translateY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .practice-section:hover {
+            transform: translateY(-3px);
+        }
+
+        .practice-question {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            border-left: 5px solid var(--warning);
+            font-weight: 500;
+            animation: pulse 2s infinite;
+        }
+
+        /* History Section */
+        .history-section {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            margin-bottom: 25px;
+            animation: fadeIn 0.8s ease-out;
+            transform: translateY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .history-section:hover {
+            transform: translateY(-3px);
+        }
+
+        .history-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .history-item {
+            padding: 18px;
+            border-bottom: 1px solid #e9ecef;
+            cursor: pointer;
+            transition: var(--transition);
+            border-radius: 10px;
+            margin-bottom: 10px;
+            background: #f8f9fa;
+            animation: slideInRight 0.5s ease-out;
+            transform: translateX(0);
+        }
+
+        .history-item:hover {
+            background: #e9ecef;
+            transform: translateX(10px) scale(1.02);
+        }
+
+        .history-question {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--dark);
+        }
+
+        .history-answer-preview {
+            color: #6c757d;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .empty-history {
+            text-align: center;
+            padding: 40px 20px;
+            color: #6c757d;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .empty-history i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            opacity: 0.5;
+            animation: bounce 2s infinite;
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(67, 97, 238, 0.2);
+            border-left: 5px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite, pulse 2s infinite;
+            margin: 0 auto 20px;
+        }
+
+        .loading-text {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 10px;
+            animation: fadeIn 1s infinite alternate;
+        }
+
+        .loading-dots {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent);
+            animation: bounce 1.5s infinite ease-in-out;
+        }
+
+        .dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        /* Voice Controls */
+        .voice-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .voice-btn {
+            flex: 1;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+            animation: fadeIn 0.8s ease-out 1.2s both;
+        }
+
+        /* Error Message */
+        .error-message {
+            background: #ffe6e6;
+            border: 1px solid #ffcccc;
+            color: #d32f2f;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            display: none;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        /* Model Info */
+        .model-info {
+            background: rgba(67, 97, 238, 0.1);
+            padding: 10px 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            text-align: center;
+            color: var(--primary);
+            animation: fadeIn 0.8s ease-out 0.5s both;
+            border-left: 4px solid var(--primary);
+        }
+
+        /* Scholar Cap Animation */
+        .scholar-cap {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 2rem;
+            animation: float 3s ease-in-out infinite;
+            z-index: 1000;
+            cursor: pointer;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInLeft {
+            from { 
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInRight {
+            from { 
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInUp {
+            from { 
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInDown {
+            from { 
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from { 
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes bounceIn {
+            0% { 
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            50% { 
+                opacity: 1;
+                transform: scale(1.05);
+            }
+            70% { 
+                transform: scale(0.9);
+            }
+            100% { 
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes zoomIn {
+            from { 
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to { 
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .logo {
+                font-size: 2.2rem;
+            }
+            
+            .input-controls {
+                flex-direction: column;
+            }
+            
+            .voice-controls {
+                flex-direction: column;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .tabs {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .scholar-cap {
+                bottom: 10px;
+                right: 10px;
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Utility Classes */
+        .text-center {
+            text-align: center;
+        }
+        
+        .mt-3 {
+            margin-top: 15px;
+        }
+        
+        .mb-3 {
+            margin-bottom: 15px;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Scholar Cap Animation -->
+    <div class="scholar-cap" title="EduBuddy Scholar">🎓</div>
+    
+    <div class="container">
+        <!-- Header Section -->
+        <header>
+            <h1 class="logo">EduBuddy</h1>
+            <p class="tagline">Your personal AI tutor for instant answers and personalized learning</p>
+            <div class="features">
+                <span class="feature-badge">Step-by-step Answers</span>
+                <span class="feature-badge">Practice Questions</span>
+                <span class="feature-badge">Text-to-Speech</span>
+                <span class="feature-badge">Image Analysis</span>
+            </div>
+        </header>
+        
+        <!-- Tab Navigation -->
+        <div class="tabs">
+            <div class="tab active" data-tab="ask">Ask Question</div>
+            <div class="tab" data-tab="history">History</div>
+        </div>
+        
+        <!-- Error Message -->
+        <div class="error-message" id="error-message"></div>
+        
+        <!-- Ask Tab Content -->
+        <div class="tab-content active" id="ask-tab">
+            <!-- Model Info -->
+            <div class="model-info">
+                <strong>Using:</strong> Google Gemini 2.0 Flash (With Image Analysis)
+            </div>
+            
+            <!-- Input Section -->
+            <section class="input-section">
+                <h2 class="section-title"><i>📚</i> Ask a Question</h2>
+                
+                <!-- Image Upload -->
+                <div class="image-upload-container">
+                    <div class="file-input-wrapper">
+                        <input type="file" id="image-upload" class="file-input" accept="image/*">
+                        <label for="image-upload" class="file-label">
+                            <i>🖼️</i> Upload Image (Optional)
+                        </label>
+                    </div>
+                    <span id="file-name" class="file-name">No image selected</span>
+                    
+                    <!-- Image Preview -->
+                    <div class="image-preview" id="image-preview">
+                        <img id="preview-image" src="" alt="Preview">
+                        <button class="remove-image" id="remove-image">Remove Image</button>
+                    </div>
+                </div>
+                
+                <textarea class="question-input" placeholder="Type your question here... (e.g., Explain photosynthesis, Solve 2x+5=15, or Describe this image)"></textarea>
+                
+                <div class="input-controls">
+                    <button class="btn btn-primary" id="submit-btn">
+                        <i>🚀</i> Get Answer
+                    </button>
+                    <button class="btn btn-secondary" id="voice-btn">
+                        <i>🎤</i> Voice Input
+                    </button>
+                </div>
+            </section>
+            
+            <!-- Loading Indicator -->
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p class="loading-text">EduBuddy is thinking...</p>
+                <div class="loading-dots">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+            </div>
+            
+            <!-- Answer Section -->
+            <section class="answer-section" id="answer-section">
+                <h2 class="section-title"><i>💡</i> Step-by-Step Solution</h2>
+                <div class="answer-content" id="answer-content">
+                    <!-- Answer will be inserted here by JavaScript -->
+                </div>
+                
+                <div class="voice-controls">
+                    <button class="btn btn-accent voice-btn" id="listen-answer-btn">
+                        <i>🔊</i> Listen to Answer
+                    </button>
+                </div>
+            </section>
+            
+            <!-- Practice Section -->
+            <section class="practice-section" id="practice-section">
+                <h2 class="section-title"><i>🧠</i> Practice Question</h2>
+                <div class="practice-question" id="practice-question">
+                    <!-- Practice question will be inserted here by JavaScript -->
+                </div>
+            </section>
+            
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="btn btn-success" id="download-pdf-btn">
+                    <i>📄</i> Download PDF
+                </button>
+                <button class="btn btn-danger" id="clear-session-btn">
+                    <i>🗑️</i> Clear Session
+                </button>
+            </div>
+        </div>
+        
+        <!-- History Tab Content -->
+        <div class="tab-content" id="history-tab">
+            <section class="history-section">
+                <h2 class="section-title"><i>📜</i> Previous Questions & Answers</h2>
+                <div class="history-list" id="history-list">
+                    <!-- History items will be inserted here by JavaScript -->
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const questionInput = document.querySelector('.question-input');
+        const submitBtn = document.getElementById('submit-btn');
+        const voiceBtn = document.getElementById('voice-btn');
+        const listenAnswerBtn = document.getElementById('listen-answer-btn');
+        const loading = document.getElementById('loading');
+        const answerSection = document.getElementById('answer-section');
+        const answerContent = document.getElementById('answer-content');
+        const practiceSection = document.getElementById('practice-section');
+        const practiceQuestion = document.getElementById('practice-question');
+        const historyList = document.getElementById('history-list');
+        const downloadPdfBtn = document.getElementById('download-pdf-btn');
+        const clearSessionBtn = document.getElementById('clear-session-btn');
+        const errorMessage = document.getElementById('error-message');
+        const imageUpload = document.getElementById('image-upload');
+        const fileName = document.getElementById('file-name');
+        const imagePreview = document.getElementById('image-preview');
+        const previewImage = document.getElementById('preview-image');
+        const removeImageBtn = document.getElementById('remove-image');
+        const scholarCap = document.querySelector('.scholar-cap');
+        
+        // Tab elements
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        // Gemini API Configuration - Locked to Gemini 2.0 Flash
+        const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
+        const GEMINI_API_KEY = 'AIzaSyAuKAYn7FiD8g0iN1eJ6A6_f7yfptYZSkk';
+        
+        // Speech Synthesis
+        let speechSynthesis = window.speechSynthesis;
+        let isSpeaking = false;
+
+        // App State
+        let currentAnswer = '';
+        let currentPractice = '';
+        let currentQuestion = '';
+        let currentImage = null;
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHistory();
+            
+            // Event Listeners
+            submitBtn.addEventListener('click', submitQuestion);
+            voiceBtn.addEventListener('click', startVoiceInput);
+            listenAnswerBtn.addEventListener('click', toggleSpeech);
+            downloadPdfBtn.addEventListener('click', downloadPdf);
+            clearSessionBtn.addEventListener('click', clearSession);
+            imageUpload.addEventListener('change', handleImageUpload);
+            removeImageBtn.addEventListener('click', removeImage);
+            scholarCap.addEventListener('click', () => {
+                scholarCap.style.animation = 'bounce 0.5s ease';
+                setTimeout(() => {
+                    scholarCap.style.animation = 'float 3s ease-in-out infinite';
+                }, 500);
+            });
+            
+            // Tab event listeners
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.getAttribute('data-tab');
+                    switchTab(tabId);
+                });
+            });
+            
+            // Allow Enter key to submit (but not Shift+Enter)
+            questionInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    submitQuestion();
+                }
+            });
+        });
+
+        // Handle image upload
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                if (file.type.startsWith('image/')) {
+                    fileName.textContent = file.name;
+                    currentImage = file;
+                    
+                    // Show preview
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        previewImage.src = e.target.result;
+                        imagePreview.style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    showError('Please select a valid image file');
+                    removeImage();
+                }
+            }
+        }
+
+        // Remove uploaded image
+        function removeImage() {
+            imageUpload.value = '';
+            fileName.textContent = 'No image selected';
+            imagePreview.style.display = 'none';
+            previewImage.src = '';
+            currentImage = null;
+        }
+
+        // Show error message
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                errorMessage.style.display = 'none';
+            }, 5000);
+        }
+
+        // Switch between tabs
+        function switchTab(tabId) {
+            // Update active tab
+            tabs.forEach(tab => {
+                if (tab.getAttribute('data-tab') === tabId) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+            
+            // Show active tab content
+            tabContents.forEach(content => {
+                if (content.id === `${tabId}-tab`) {
+                    content.classList.add('active');
+                } else {
+                    content.classList.remove('active');
+                }
+            });
+        }
+
+        // Submit question to AI
+        async function submitQuestion() {
+            const question = questionInput.value.trim();
+            
+            if (!question) {
+                showError('Please enter a question');
+                return;
+            }
+            
+            currentQuestion = question;
+            
+            // Show loading, hide previous results and errors
+            loading.style.display = 'block';
+            answerSection.style.display = 'none';
+            practiceSection.style.display = 'none';
+            errorMessage.style.display = 'none';
+            
+            try {
+                let aiResponse;
+                
+                // Try Gemini API
+                try {
+                    console.log('Calling Gemini API with image support...');
+                    aiResponse = await callGeminiAPI(question, currentImage);
+                } catch (error) {
+                    console.error('Gemini API error:', error);
+                    
+                    // If we get a rate limit error, show specific message
+                    if (error.message.includes('429') || error.message.includes('RESOURCE_EXHAUSTED')) {
+                        throw new Error('Rate limit exceeded. Please wait a moment and try again.');
+                    }
+                    
+                    // If we get authentication error
+                    if (error.message.includes('401') || error.message.includes('403') || error.message.includes('PERMISSION_DENIED')) {
+                        throw new Error('API authentication failed. Please check your API key.');
+                    }
+                    
+                    throw new Error(`API Error: ${error.message}`);
+                }
+                
+                // Parse the response to extract answer and practice question
+                const { answer, practice } = parseAIResponse(aiResponse);
+                
+                // Store current answer and practice for later use
+                currentAnswer = answer;
+                currentPractice = practice;
+                
+                // Display the results
+                displayAnswer(answer);
+                displayPracticeQuestion(practice);
+                
+                // Store in history
+                saveToHistory(question, answer, practice, currentImage ? 'with image' : '');
+                
+                // Switch to ask tab if not already there
+                switchTab('ask');
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showError(`Sorry, I encountered an error: ${error.message}. Please try again.`);
+            } finally {
+                loading.style.display = 'none';
+            }
+        }
+
+        // Call Gemini API with image support
+        async function callGeminiAPI(question, imageFile) {
+            // Prepare the prompt for the AI
+            const prompt = `You are a patient tutor. A student asks: "${question}". 
+            Give a clear step-by-step solution and one practice question on the same topic.
+            Format your response without markdown or special characters. Use clear, simple language.
+            
+            Structure your response as follows:
+            [ANSWER]
+            Provide the step-by-step answer here
+            [PRACTICE]
+            Provide one practice question here`;
+
+            // Prepare request contents
+            let contents = [];
+            
+            if (imageFile) {
+                // Convert image to base64
+                const base64Image = await fileToBase64(imageFile);
+                
+                // Create multimodal request with image
+                contents = [{
+                    parts: [
+                        {
+                            text: prompt
+                        },
+                        {
+                            inline_data: {
+                                mime_type: imageFile.type,
+                                data: base64Image
+                            }
+                        }
+                    ]
+                }];
+            } else {
+                // Text-only request
+                contents = [{
+                    parts: [{
+                        text: prompt
+                    }]
+                }];
+            }
+
+            // Make API request to Gemini
+            const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    contents: contents,
+                    generationConfig: {
+                        maxOutputTokens: 1500,
+                        temperature: 0.7
+                    }
+                })
+            });
+            
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+                throw new Error(`API Error: ${response.status} - ${errorData.error?.message || errorData.error || 'Unknown error'}`);
+            }
+            
+            const data = await response.json();
+            
+            if (!data.candidates || !data.candidates[0] || !data.candidates[0].content || !data.candidates[0].content.parts || !data.candidates[0].content.parts[0]) {
+                throw new Error('Invalid API response format');
+            }
+            
+            return data.candidates[0].content.parts[0].text;
+        }
+
+        // Convert file to base64
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => {
+                    // Remove the data:url prefix (e.g., "data:image/jpeg;base64,")
+                    const base64 = reader.result.split(',')[1];
+                    resolve(base64);
+                };
+                reader.onerror = error => reject(error);
+            });
+        }
+
+        // Parse AI response to extract answer and practice question
+        function parseAIResponse(response) {
+            // Clean the response of markdown and special characters
+            let cleanResponse = response
+                .replace(/#{1,6}/g, '') // Remove headers
+                .replace(/\*\*(.*?)\*\*/g, '$1') // Remove bold
+                .replace(/\*(.*?)\*/g, '$1') // Remove italic
+                .replace(/`{1,3}(.*?)`{1,3}/g, '$1') // Remove code blocks
+                .replace(/\[(.*?)\]\(.*?\)/g, '$1') // Remove links
+                .replace(/\n{3,}/g, '\n\n') // Replace multiple newlines
+                .trim();
+            
+            // Try to extract using markers
+            const answerMatch = cleanResponse.match(/\[ANSWER\](.*?)(\[PRACTICE\]|$)/is);
+            const practiceMatch = cleanResponse.match(/\[PRACTICE\](.*?)$/is);
+            
+            let answer, practice;
+            
+            if (answerMatch && answerMatch[1]) {
+                answer = answerMatch[1].trim();
+            } else {
+                // Fallback: Use the first part as answer
+                const parts = cleanResponse.split(/\n\n/);
+                answer = parts[0] || cleanResponse;
+            }
+            
+            if (practiceMatch && practiceMatch[1]) {
+                practice = practiceMatch[1].trim();
+            } else {
+                // Fallback: Use the last paragraph as practice question
+                const paragraphs = cleanResponse.split(/\n\n/);
+                practice = paragraphs[paragraphs.length - 1] || "Based on the topic, try to solve a similar problem on your own.";
+            }
+            
+            return { answer, practice };
+        }
+
+        // Display the answer in a formatted way
+        function displayAnswer(answer) {
+            // Format steps if they exist
+            const steps = answer.split(/(?=\d+\.|\n\d+\.|Step \d+)/);
+            
+            if (steps.length > 1) {
+                let formattedAnswer = '';
+                steps.forEach(step => {
+                    if (step.trim()) {
+                        // Add step number if not already present
+                        if (!step.match(/^\d+\./) && !step.match(/^Step \d+/)) {
+                            formattedAnswer += `<div class="step"><span class="step-number">•</span> ${step.trim()}</div>`;
+                        } else {
+                            formattedAnswer += `<div class="step">${step.trim()}</div>`;
+                        }
+                    }
+                });
+                answerContent.innerHTML = formattedAnswer;
+            } else {
+                answerContent.innerHTML = `<div class="step"><span class="step-number">•</span> ${answer}</div>`;
+            }
+            
+            answerSection.style.display = 'block';
+        }
+
+        // Display the practice question
+        function displayPracticeQuestion(question) {
+            practiceQuestion.textContent = question;
+            practiceSection.style.display = 'block';
+        }
+
+        // Save question and answer to localStorage
+        function saveToHistory(question, answer, practice, imageInfo = '') {
+            let history = JSON.parse(localStorage.getItem('edubuddy_history')) || [];
+            
+            // Create a unique ID for this session
+            const sessionId = Date.now().toString();
+            
+            // Add new item at the beginning
+            history.unshift({
+                id: sessionId,
+                question,
+                answer,
+                practice,
+                imageInfo,
+                timestamp: new Date().toISOString()
+            });
+            
+            // Keep only the last 20 items
+            if (history.length > 20) {
+                history = history.slice(0, 20);
+            }
+            
+            localStorage.setItem('edubuddy_history', JSON.stringify(history));
+            loadHistory();
+        }
+
+        // Load history from localStorage
+        function loadHistory() {
+            const history = JSON.parse(localStorage.getItem('edubuddy_history')) || [];
+            historyList.innerHTML = '';
+            
+            if (history.length === 0) {
+                historyList.innerHTML = `
+                    <div class="empty-history">
+                        <i>📜</i>
+                        <p>No previous questions yet. Ask something to get started!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            history.forEach((item, index) => {
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item';
+                historyItem.dataset.id = item.id;
+                
+                let imageBadge = '';
+                if (item.imageInfo) {
+                    imageBadge = '<span style="background: #4cc9f0; color: white; padding: 2px 6px; border-radius: 10px; font-size: 0.7rem; margin-left: 5px;">📷</span>';
+                }
+                
+                historyItem.innerHTML = `
+                    <div class="history-question">${item.question} ${imageBadge}</div>
+                    <div class="history-answer-preview">${item.answer.substring(0, 100)}...</div>
+                    <small style="color: #999; font-size: 0.8rem;">${new Date(item.timestamp).toLocaleString()}</small>
+                `;
+                
+                historyItem.addEventListener('click', () => {
+                    displayHistoryItem(item);
+                });
+                
+                historyList.appendChild(historyItem);
+            });
+        }
+
+        // Display a history item
+        function displayHistoryItem(item) {
+            currentQuestion = item.question;
+            currentAnswer = item.answer;
+            currentPractice = item.practice;
+            displayAnswer(item.answer);
+            displayPracticeQuestion(item.practice);
+            
+            // Switch to ask tab
+            switchTab('ask');
+            
+            // Scroll to answer section
+            answerSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Clear session (localStorage)
+        function clearSession() {
+            if (confirm('Are you sure you want to clear all your questions and answers?')) {
+                localStorage.removeItem('edubuddy_history');
+                loadHistory();
+                answerSection.style.display = 'none';
+                practiceSection.style.display = 'none';
+                questionInput.value = '';
+                errorMessage.style.display = 'none';
+                removeImage();
+            }
+        }
+
+        // Download PDF of current session
+        function downloadPdf() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Add title
+            doc.setFontSize(20);
+            doc.setTextColor(67, 97, 238);
+            doc.text('EduBuddy Learning Session', 20, 20);
+            
+            // Add current date
+            doc.setFontSize(12);
+            doc.setTextColor(100, 100, 100);
+            doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 20, 30);
+            
+            // Add question if exists
+            const question = questionInput.value.trim();
+            if (question) {
+                doc.setFontSize(14);
+                doc.setTextColor(0, 0, 0);
+                doc.text('Question:', 20, 50);
+                doc.setFontSize(12);
+                const splitQuestion = doc.splitTextToSize(question, 170);
+                doc.text(splitQuestion, 20, 60);
+            }
+            
+            // Add answer if exists
+            if (answerSection.style.display !== 'none') {
+                let yPosition = question ? 80 : 50;
+                
+                doc.setFontSize(14);
+                doc.setTextColor(0, 0, 0);
+                doc.text('Solution:', 20, yPosition);
+                
+                doc.setFontSize(12);
+                const answerText = answerContent.textContent;
+                const splitAnswer = doc.splitTextToSize(answerText, 170);
+                doc.text(splitAnswer, 20, yPosition + 10);
+                
+                yPosition += splitAnswer.length * 7 + 20;
+                
+                // Add practice question if exists
+                if (practiceSection.style.display !== 'none') {
+                    doc.setFontSize(14);
+                    doc.text('Practice Question:', 20, yPosition);
+                    
+                    doc.setFontSize(12);
+                    const practiceText = practiceQuestion.textContent;
+                    const splitPractice = doc.splitTextToSize(practiceText, 170);
+                    doc.text(splitPractice, 20, yPosition + 10);
+                }
+            }
+            
+            // Save the PDF
+            doc.save('EduBuddy-Session.pdf');
+        }
+
+        // Voice input functionality
+        function startVoiceInput() {
+            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                showError('Speech recognition is not supported in your browser. Try Chrome or Edge.');
+                return;
+            }
+            
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const recognition = new SpeechRecognition();
+            
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = 'en-US';
+            
+            recognition.start();
+            
+            voiceBtn.innerHTML = '<i>🎤</i> Listening...';
+            voiceBtn.disabled = true;
+            
+            recognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript;
+                questionInput.value = transcript;
+                voiceBtn.innerHTML = '<i>🎤</i> Voice Input';
+                voiceBtn.disabled = false;
+            };
+            
+            recognition.onerror = function(event) {
+                console.error('Speech recognition error', event.error);
+                showError('Error with voice input: ' + event.error);
+                voiceBtn.innerHTML = '<i>🎤</i> Voice Input';
+                voiceBtn.disabled = false;
+            };
+            
+            recognition.onend = function() {
+                voiceBtn.innerHTML = '<i>🎤</i> Voice Input';
+                voiceBtn.disabled = false;
+            };
+        }
+
+        // Text-to-speech for answers
+        function speakAnswer() {
+            if (answerSection.style.display === 'none') {
+                showError('No answer to read aloud');
+                return;
+            }
+            
+            if (isSpeaking) {
+                speechSynthesis.cancel();
+                isSpeaking = false;
+                listenAnswerBtn.innerHTML = '<i>🔊</i> Listen to Answer';
+                return;
+            }
+            
+            const answerText = answerContent.textContent;
+            const utterance = new SpeechSynthesisUtterance(answerText);
+            
+            utterance.rate = 0.9;
+            utterance.pitch = 1;
+            utterance.volume = 0.8;
+            
+            utterance.onstart = function() {
+                isSpeaking = true;
+                listenAnswerBtn.innerHTML = '<i>⏹️</i> Stop';
+            };
+            
+            utterance.onend = function() {
+                isSpeaking = false;
+                listenAnswerBtn.innerHTML = '<i>🔊</i> Listen to Answer';
+            };
+            
+            utterance.onerror = function() {
+                isSpeaking = false;
+                listenAnswerBtn.innerHTML = '<i>🔊</i> Listen to Answer';
+            };
+            
+            speechSynthesis.speak(utterance);
+        }
+
+        // Toggle speech (start/stop)
+        function toggleSpeech() {
+            if (isSpeaking) {
+                speechSynthesis.cancel();
+                isSpeaking = false;
+                listenAnswerBtn.innerHTML = '<i>🔊</i> Listen to Answer';
+            } else {
+                speakAnswer();
+            }
+        }
+    </script>
+</body>
+</html>
